@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
-from .models import Book, Library
-
+from .models import Book
+from .models import Library
 
 def list_books_function_view(request):
     """Function-based view: lists all books with their authors"""
