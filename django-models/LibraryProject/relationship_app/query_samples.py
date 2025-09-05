@@ -24,7 +24,8 @@ def get_librarian_for_library(library_name):
     """Retrieve the librarian for a library"""
     try:
         library = Library.objects.get(name=library_name)
-        return library.librarian  # thanks to OneToOneField related_name="librarian"
+        Librarian = Librarian.objects.get(library=library) # explicit query
+        return librarian
     except (Library.DoesNotExist, Librarian.DoesNotExist):
         return None
 
