@@ -23,4 +23,7 @@ urlpatterns = [
     path("admin-role/", admin_view, name="admin_role"),
     path("librarian-role/", librarian_view, name="librarian_role"),
     path("member-role/", member_view, name="member_role"),
+
+    path("admin-view/", admin_view, name="admin_view"),
+    path("librarian-view/", librarian_view, name="librarian_view"),
 ]
