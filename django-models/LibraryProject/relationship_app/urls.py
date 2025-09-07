@@ -4,6 +4,8 @@ from .admin_view import admin_view
 from .librarian_view import librarian_view
 from .member_view import member_view
 from django.contrib.auth.views import LoginView, LogoutView
+from .views import create_book, update_book, delete_book, list_books
+
 
 urlpatterns = [
     # Function-based view → lists all books
@@ -26,4 +28,10 @@ urlpatterns = [
 
     path("admin-view/", admin_view, name="admin_view"),
     path("librarian-view/", librarian_view, name="librarian_view"),
+    
+    # Role-based modification
+    path("books/", list_books, name="book_list"),
+    path("books/add/", create_book, name="create_book"),
+    path("books/<int:pk>/edit/", update_book, name="update_book"),
+    path("books/<int:pk>/delete/", delete_book, name="delete_book"),
 ]
