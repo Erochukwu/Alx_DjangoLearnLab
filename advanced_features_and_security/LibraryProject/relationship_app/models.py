@@ -2,30 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import AbstractUser
-from .managers import CustomUserManager   # import your manager
 from django.conf import settings
 
-class CustomUser(AbstractUser):
-    date_of_birth = models.DateField(null=True, blank=True)
-    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
-
-    objects = CustomUserManager()   # attach custom manager
-
-    def __str__(self):
-        return self.username
-
 class UserProfile(models.Model):
-    ROLE_CHOICES = [
-        ('Admin', 'Admin'),
-        ('Librarian', 'Librarian'),
-        ('Member', 'Member'),
-    ]
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
-
-    def __str__(self):
-        return f"{self.user.username} ({self.role})"
+    role = models.CharField(max_length=20, choices=[
+        ("Admin", "Admin"),
+        ("Librarian", "Librarian"),
+        ("Member", "Member"),
+    ], default="Member")
 
 
 class Author(models.Model):
