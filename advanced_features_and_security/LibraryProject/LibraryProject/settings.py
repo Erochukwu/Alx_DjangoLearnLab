@@ -90,3 +90,26 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ----------------------------------------
+# Security settings
+# ----------------------------------------
+
+# Enables the browser's built-in XSS (Cross-Site Scripting) protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevents the site from being displayed inside an iframe
+# (protects against clickjacking attacks)
+X_FRAME_OPTIONS = "DENY"
+
+# Prevents the browser from trying to guess the content type (MIME sniffing)
+# which helps reduce XSS attacks
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Ensures the CSRF cookie is only sent over HTTPS connections
+# (set to False in local development if not using HTTPS)
+CSRF_COOKIE_SECURE = True
+
+# Ensures the session cookie is only sent over HTTPS connections
+# (set to False in local development if not using HTTPS)
+SESSION_COOKIE_SECURE = True
+
