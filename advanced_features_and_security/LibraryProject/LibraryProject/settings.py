@@ -1,6 +1,11 @@
+#Django settings for LibraryProject project.
+#This file includes additional security configurations to enforce HTTPS,
+#secure cookies, and protection headers against common attacks.
+
 import os
 from pathlib import Path
 
+# Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -23,19 +28,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Your apps
+    # Local apps
     "bookshelf",
     "relationship_app",
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
+    "django.middleware.security.SecurityMiddleware",   # Required for many security settings    
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",   # Protects against CSRF attacks
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",    # Prevents clickjacking
 ]
 
 ROOT_URLCONF = "LibraryProject.urls"
@@ -58,7 +63,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "LibraryProject.wsgi.application"
 
-# Database
+# ------------------------------------------------------------------------------
+# Database (SQLite for local, replace with PostgreSQL/MySQL in production)
+# ------------------------------------------------------------------------------    
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -112,4 +119,12 @@ CSRF_COOKIE_SECURE = True
 # Ensures the session cookie is only sent over HTTPS connections
 # (set to False in local development if not using HTTPS)
 SESSION_COOKIE_SECURE = True
+
+# ------------------------------------------------------------------------------
+# HTTPS enforcement
+# ------------------------------------------------------------------------------
+
+# Redirect all non-HTTPS requests to HTTPS
+# This ensures that communication between client and server is always encrypted.
+SECURE_SSL_REDIRECT = True
 
