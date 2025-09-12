@@ -134,6 +134,14 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # Allow this site to be included in browsers’ preloaded HSTS lists.
 SECURE_HSTS_PRELOAD = True  
 
+# ------------------------------------------------------------------------------
+# Secure Proxy SSL Header
+# ------------------------------------------------------------------------------
+
+# When Django is behind a proxy (like Nginx or Heroku), the proxy sets a header
+# such as `HTTP_X_FORWARDED_PROTO` to indicate if the original request was HTTPS.
+# This setting tells Django to trust that header and treat the request as secure.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ------------------------------------------------------------------------------
 # HTTPS enforcement
