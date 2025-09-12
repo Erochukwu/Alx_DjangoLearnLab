@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book List</title>
+</head>
+<body>
+    <h1>Books</h1>
+
+    <!-- Search form -->
+    <form method="get">
+        <input type="text" name="q" placeholder="Search books..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- List all books -->
+    <ul>
+        {% for book in books %}
+            <li>
+                <strong>{{ book.title }}</strong> by {{ book.author }} ({{ book.publication_year }})
+            </li>
+        {% empty %}
+            <li>No books available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
