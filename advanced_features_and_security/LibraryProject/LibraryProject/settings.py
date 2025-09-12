@@ -121,6 +121,21 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 # ------------------------------------------------------------------------------
+# HTTP Strict Transport Security (HSTS)
+# ------------------------------------------------------------------------------
+
+# Instructs browsers to only connect via HTTPS for 1 year (31536000 seconds).
+# This prevents protocol downgrade attacks and cookie hijacking.
+SECURE_HSTS_SECONDS = 31536000  
+
+# Apply HSTS policy to all subdomains as well.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  
+
+# Allow this site to be included in browsers’ preloaded HSTS lists.
+SECURE_HSTS_PRELOAD = True  
+
+
+# ------------------------------------------------------------------------------
 # HTTPS enforcement
 # ------------------------------------------------------------------------------
 
