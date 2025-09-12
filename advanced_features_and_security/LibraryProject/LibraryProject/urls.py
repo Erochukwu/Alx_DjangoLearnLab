@@ -18,9 +18,22 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("""
+        <h1>Welcome to the Library Project</h1>
+        <p>
+            <a href='/admin/'>Go to Admin</a><br>
+            <a href='/books/'>View Books</a><br>
+            <a href='/login/'>Login</a> | 
+            <a href='/register/'>Register</a>
+        </p>
+    """)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('', home, name='home'),
     path("", include("relationship_app.urls")),  # include app URLs
 ]
 

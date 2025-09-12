@@ -9,7 +9,7 @@ from .views import create_book, update_book, delete_book, list_books
 
 urlpatterns = [
     # Function-based view → lists all books
-    path("books-fbv/", views.list_books_function_view, name="books_fbv"),
+    path("books-fbv/", views.list_books, name="books_fbv"),
 
     # Class-based view → details of a specific library
     path("library/<int:pk>/", views.LibraryDetailView.as_view(), name="library_detail"),

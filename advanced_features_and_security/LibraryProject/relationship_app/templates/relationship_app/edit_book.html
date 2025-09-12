@@ -1,0 +1,15 @@
+{% extends "relationship_app/base.html" %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+<h1>Edit Book: {{ book.title }}</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>Title: <input type="text" name="title" value="{{ book.title }}"></p>
+    <p>Author: <input type="text" name="author" value="{{ book.author }}"></p>
+    <button type="submit">Update</button>
+</form>
+<a href="{% url 'book_list' %}">Back to list</a>
+{% endblock %}
+
