@@ -13,7 +13,7 @@ These permissions are automatically created in the database after running migrat
 ## Groups - we created three groups namely admin, Editors and Viewers
 We created a group called **Admin** with the following permissions:
 - `can_create`
-- 'can_delete'
+- `can_delete`
 - `can_edit`
 - `can_view` (default Django view permission)
 

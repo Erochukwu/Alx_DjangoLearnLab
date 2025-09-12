@@ -5,9 +5,22 @@ from .models import Book
 
 # View books (requires can_view)
 @permission_required('bookshelf.can_view', raise_exception=True)
-def book_list(request):
-    books = Book.objects.all()
-    return render(request, "bookshelf/book_list.html", {"books": books})
+def list_books(request):
+    # Get the search query from the URL parameter 'q', default to empty string
+    query = request.GET.get("q", "").strip()  # .strip() removes leading/trailing spaces
+
+    # Use Django ORM to safely filter books by title (case-insensitive)
+    if query:
+        books = Book.objects.filter(title__icontains=query)
+    else:
+        books = Book.objects.all()
+
+    # Pass the books and the search query back to the template
+    return render(request, "relationship_app/book_list.html", {
+        "books": books,
+        "query": query,
+    })
+
 
 # Create a new book (requires can_create)
 @permission_required('bookshelf.can_create', raise_exception=True)
@@ -40,4 +53,12 @@ def delete_book(request, book_id):
         book.delete()
         return redirect("book_list")
     return render(request, "bookshelf/delete_book.html", {"book": book})
+
+# Using ORM to avoid SQL injection
+#books = Book.objects.filter(title__icontains=query)  # Safe, parameterized query
+
+# If user input is from forms, validate it
+#form = BookForm(request.POST)
+#if form.is_valid():
+    form.save()
 

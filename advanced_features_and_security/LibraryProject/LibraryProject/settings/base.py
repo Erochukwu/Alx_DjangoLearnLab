@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'relationship_app',
 ]
 MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -129,4 +131,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTH_USER_MODEL = "bookshelf.CustomUser"
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')  # allow styles from Google Fonts
+CSP_FONT_SRC = ("'self'", 'fonts.gstatic.com')
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'", 'data:')  # allow inline images
+
 
