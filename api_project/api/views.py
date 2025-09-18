@@ -1,4 +1,7 @@
 from rest_framework import generics, viewsets
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import SAFE_METHODS, BasePermission
+
 from .models import Book
 from .serializers import BookSerializer
 
@@ -36,4 +39,17 @@ class BookViewSet(viewsets.ModelViewSet):
 
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+# Apply permission rules
+    permission_classes = [IsAuthenticated]  # Default: must be logged in
+
+    class IsAdminOrReadOnly(BasePermission):
+    # Custom permission:
+    # ... SAFE_METHODS (GET, HEAD, OPTIONS) are allowed for any authenticated user...
+    # - POST, PUT, PATCH, DELETE are restricted to admin users only."""
+        def has_permission(self, request, view):
+            if request.method in SAFE_METHODS:
+                return request.user and request.user.is_authenticated
+            return request.user and request.user.is_staff
+
 
