@@ -33,6 +33,7 @@ def home(request):
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),  # adds login/logout/password reset
     path('', home, name='home'),
     path("", include("relationship_app.urls")),  # include app URLs
 ]

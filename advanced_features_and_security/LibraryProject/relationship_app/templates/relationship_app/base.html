@@ -7,8 +7,10 @@
 <body>
     <nav>
         <a href="{% url 'book_list' %}">Books</a> |
+        
         {% if user.is_authenticated %}
-            Hello, {{ user.username }} |
+            Hello, {{ user.first_name|default:user.username }} |
+            <a href="{% url 'password_change' %}">Reset Password</a> |
             <a href="{% url 'logout' %}">Logout</a>
         {% else %}
             <a href="{% url 'login' %}">Login</a> |
@@ -22,3 +24,4 @@
     {% endblock %}
 </body>
 </html>
+

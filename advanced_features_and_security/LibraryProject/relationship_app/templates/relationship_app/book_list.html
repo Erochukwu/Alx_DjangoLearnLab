@@ -14,3 +14,8 @@
     </li>
 {% endfor %}
 
+<form method="get" action="{% url 'book_list' %}">
+    <input type="text" name="q" value="{{ query }}" placeholder="Search books">
+    {% csrf_token %}
+    <button type="submit">Search</button>
+</form>
