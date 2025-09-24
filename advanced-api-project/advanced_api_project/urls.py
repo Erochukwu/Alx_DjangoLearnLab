@@ -17,7 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+"""
+Project-Level URL Configuration
+-------------------------------
+This file connects the project's URL routing with the 'api' app,
+so that requests to /api/ are directed to the app's URL patterns.
+"""
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    path('api/', include('api.urls')),     # Mount the API routes under /api/
 ]
