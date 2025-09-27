@@ -5,7 +5,6 @@ from rest_framework.exceptions import ValidationError
 from datetime import date
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.permissions import BasePermission
 from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly, IsAuthenticated
 
 @api_view(['GET'])
@@ -70,7 +69,7 @@ class BookCreateView(generics.CreateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]   # ✅ auth required
+    permission_classes = [IsAuthenticated]   # ✅ auth required
 
     def perform_create(self, serializer):
         # Extra validation: publication_year must not be in the future
@@ -91,7 +90,7 @@ class BookUpdateView(generics.UpdateAPIView):
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]    # ✅ auth required
+    permission_classes = [IsAuthenticated]    # ✅ auth required
 
     def perform_update(self, serializer):
         # Extra validation: publication_year must not be in the future
@@ -111,4 +110,4 @@ class BookDeleteView(generics.DestroyAPIView):
     """Delete an existing book record. Requires authentication."""
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAdminOrReadOnly]     # ✅ auth required   
+    permission_classes = [IsAuthenticatedOrReadOnly]     # ✅ auth required   
