@@ -5,7 +5,8 @@ from rest_framework.exceptions import ValidationError
 from datetime import date
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.permissions import BasePermission, IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import BasePermission
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 @api_view(['GET'])
 def index(request):
