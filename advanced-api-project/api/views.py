@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, filters
 from rest_framework.exceptions import ValidationError
 from datetime import date
@@ -27,18 +28,42 @@ class BookListView(generics.ListAPIView):
     ------------
     Purpose:
         Retrieve a list of all books stored in the database.
-        Supports filtering by publication_year and author.
+    
     Features:
         - GET: Returns a JSON array of all books.
-        - Filtering: Allows ?publication_year=YYYY or ?author=<author_id>.
+        - Filtering: Supports filtering by publication_year, author, and title.
+        - Search: Allows keyword search in title and author name.
+        - Ordering: Supports ordering by publication_year or title.
+    
+    Query Parameters:
+        - Filtering:
+            ?title=The Hobbit
+            ?author=2
+            ?publication_year=2021
+        - Searching:
+            ?search=tolkien
+            ?search=The Hobbit
+        - Ordering:
+            ?ordering=publication_year
+            ?ordering=-title
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]   # ✅ anyone can read
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ["title", "author__name"]
-    ordering_fields = ["publication_year", "title"]
 
+     # ✅ Enable filtering, search, and ordering
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    # ✅ Explicit filterable fields
+    filterset_fields = ["title", "author", "publication_year"]
+
+    # ✅ Searchable fields (partial match)
+    search_fields = ["title", "author__name"]
+
+    # ✅ Allow ordering
+    ordering_fields = ["publication_year", "title"]
+    ordering = ["title"]   # default ordering
+    
     def get_queryset(self):
         queryset = super().get_queryset()
         year = self.request.query_params.get("publication_year")
