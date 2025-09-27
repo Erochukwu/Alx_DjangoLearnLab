@@ -8,6 +8,8 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import BasePermission
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework as django_filters
+
 
 @api_view(['GET'])
 def index(request):
@@ -63,7 +65,7 @@ class BookListView(generics.ListAPIView):
     # ✅ Allow ordering
     ordering_fields = ["publication_year", "title"]
     ordering = ["title"]   # default ordering
-    
+
     def get_queryset(self):
         queryset = super().get_queryset()
         year = self.request.query_params.get("publication_year")
