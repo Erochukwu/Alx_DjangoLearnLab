@@ -139,3 +139,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Where to redirect users after login/logout
+LOGIN_REDIRECT_URL = 'profile'   # after login → go to homepage
+LOGOUT_REDIRECT_URL = 'login' # after logout → back to homepage
