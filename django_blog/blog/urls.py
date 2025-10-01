@@ -1,29 +1,55 @@
 # blog/urls.py
 
 from django.urls import path
-from django.contrib.auth import views as auth_views  # Django’s built-in authentication views
-from . import views  # our custom views
+from django.contrib.auth import views as auth_views
+from . import views
+from .views import (
+    PostListView,
+    PostDetailView,
+    PostCreateView,
+    PostUpdateView,
+    PostDeleteView
+)
 
 urlpatterns = [
     # -------------------------
-    # Blog routes
+    # Blog Post URLs
     # -------------------------
-    path('', views.home, name='home'),   # Homepage → blog/views.home
-    path('posts/', views.post_list, name='posts'),  # Blog posts → blog/views.post_list
+
+    # Homepage showing all posts
+    path('', PostListView.as_view(), name='home'),
+
+    # Post list (tests/templates expect 'post_list')
+    path('posts/', PostListView.as_view(), name='post_list'),
+
+    # Alias for legacy tests/templates: 'posts'
+    path('posts/', PostListView.as_view(), name='posts'),
+
+    # Post detail view
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+
+    # Create a new post (login required)
+    path('post/new/', PostCreateView.as_view(), name='post_create'),
+
+    # Update post (author only)
+    path('post/<int:pk>/edit/', PostUpdateView.as_view(), name='post_update'),
+
+    # Delete post (author only)
+    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
 
     # -------------------------
-    # Authentication routes
+    # Authentication URLs
     # -------------------------
-    # Built-in login view, customized to use our template blog/login.html
+
+    # Login
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
 
-    # Built-in logout view, customized to use blog/logout.html
+    # Logout
     path('logout/', auth_views.LogoutView.as_view(template_name='blog/logout.html'), name='logout'),
 
-    # Custom registration view → blog/views.register
+    # Register
     path('register/', views.register, name='register'),
 
-    # User profile route (custom view in blog/views.py)
+    # Profile
     path('profile/', views.profile, name='profile'),
 ]
-
