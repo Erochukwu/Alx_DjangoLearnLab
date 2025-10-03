@@ -91,9 +91,12 @@ class PostDetailView(DetailView):
         context['comment_form'] = CommentForm()
         return context
     
-class PostsByTagListView(ListView):
+class PostByTagListView(ListView):
+    """
+    View to list posts filtered by a specific tag.
+    """
     model = Post
-    template_name = "blog/posts_by_tag.html"
+    template_name = "blog/post_list.html"
     context_object_name = "posts"
 
     def get_queryset(self):

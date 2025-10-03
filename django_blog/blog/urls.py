@@ -20,8 +20,8 @@ urlpatterns = [
     path('posts/', PostListView.as_view(), name='post_list'),
     path('posts/', PostListView.as_view(), name='posts'),
 
-    # Tag and search url
-    path("tags/<str:tag_name>/", PostsByTagListView.as_view(), name="posts_by_tag"),
+    # Tag and search urls
+    path("tags/<slug:tag_slug>/", PostByTagListView.as_view(), name="posts_by_tag"),
     path("search/", PostSearchListView.as_view(), name="post_search"),
 
 
