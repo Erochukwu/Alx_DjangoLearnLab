@@ -70,3 +70,99 @@ User authentication ensures that only authors can edit or delete their own posts
     <a href="{% url 'post_update' post.pk %}">Edit</a>
     <a href="{% url 'post_delete' post.pk %}">Delete</a>
 {% endif %}
+
+
+Comment System Documentation
+Overview
+
+The Comment System allows users to interact with blog posts by leaving feedback in the form of comments. It supports creating, editing, and deleting comments, with rules that ensure only the rightful author can manage their own comments.
+
+Features
+
+Users can:
+
+Add comments to posts.
+
+Edit their own comments.
+
+Delete their own comments.
+
+Visitors (unauthenticated users) can:
+
+View comments but cannot create, edit, or delete them.
+
+Permissions:
+
+Only the comment author (or an admin) can edit or delete a comment.
+
+Comments are displayed under each post in reverse chronological order.
+
+Code Components
+Models
+
+Comment model stores:
+
+post → Linked to a specific blog post.
+
+author → The user who wrote the comment.
+
+content → The body of the comment.
+
+created_at / updated_at → Timestamps for tracking comment activity.
+
+Forms
+
+CommentForm provides a simple text area for users to submit or edit their comments.
+
+Views
+
+CommentCreateView → Allows logged-in users to add a new comment under a post.
+
+CommentUpdateView → Restricts editing to the comment’s author only.
+
+CommentDeleteView → Restricts deletion to the comment’s author only.
+
+URLs
+
+/post/<post_id>/comment/new/ → Create a comment on a specific post.
+
+/comment/<comment_id>/edit/ → Edit a comment.
+
+/comment/<comment_id>/delete/ → Delete a comment.
+
+Templates
+Post Detail Page (post_detail.html)
+
+Displays all comments under a post.
+
+Shows Edit and Delete links only to the comment’s author.
+
+Provides a comment form for logged-in users.
+
+Prompts guests to log in before commenting.
+
+Delete Confirmation Page (comment_confirm_delete.html)
+
+Confirms before permanently deleting a comment.
+
+Usage Guide
+
+Adding a Comment
+
+Open a post’s detail page.
+
+Scroll to the comment section.
+
+Logged-in users can type and submit a comment form.
+
+Editing a Comment
+
+Click the Edit link under your comment.
+
+Update the text and save changes.
+
+Deleting a Comment
+
+Click the Delete link under your comment.
+
+Confirm deletion to remove it permanently.

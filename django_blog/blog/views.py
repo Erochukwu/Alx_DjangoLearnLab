@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django import forms
 from django.http import HttpResponse
-from .models import Post
+from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .forms import PostForm
+
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 
 
 # --- Create a Profile Form ---
@@ -80,6 +82,13 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        # Get default context from DetailView
+        context = super().get_context_data(**kwargs)
+        # Add a fresh comment form
+        context['comment_form'] = CommentForm()
+        return context
+
 # Create a new blog post (authenticated users only)
 class PostCreateView(LoginRequiredMixin, CreateView):
     """
@@ -139,3 +148,73 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         """
         post = self.get_object()
         return self.request.user == post.author
+    
+class CommentForm(forms.ModelForm):
+    """
+    Form for creating and updating comments on blog posts.
+    """
+    
+    class Meta:
+        model = Comment
+        fields = ['content']  # Only allow users to set the comment text
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Write your comment here...',
+                'rows': 3,
+            }),
+        }
+        labels = {
+            'content': 'Comment',
+        }
+
+    def clean_content(self):
+        """
+        Ensure the comment content is not empty or too short.
+        """
+        content = self.cleaned_data.get('content', '').strip()
+        if not content:
+            raise forms.ValidationError("Comment cannot be empty.")
+        if len(content) < 5:
+            raise forms.ValidationError("Comment is too short. Please write at least 5 characters.")
+        return content
+    
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        post_id = self.kwargs.get("post_id")
+        form.instance.post = get_object_or_404(Post, pk=post_id)
+        return super().form_valid(form)
+
+
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={"pk": self.object.post.pk})
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "blog/comment_form.html"
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={"pk": self.object.post.pk})
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = "blog/comment_confirm_delete.html"
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={"pk": self.object.post.pk})
