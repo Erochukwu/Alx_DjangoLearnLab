@@ -42,21 +42,8 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags']  # Exclude 'author'; set automatically
-        widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter post title'
-            }),
-            'content': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Write your post content here...',
-                'rows': 5
-            }),
-            "tags": forms.CheckboxSelectMultiple(),  # or forms.SelectMultiple()
-        },
-        
-
+        fields = ['title', 'content', 'tags']  # 'tags' comes from django-taggit
+               
     def clean_title(self):
         """
         Validate that the title is not empty and is at least 5 characters long.
