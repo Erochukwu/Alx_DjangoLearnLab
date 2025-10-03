@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
+from taggit.managers import TaggableManager
+
 
 class Post(models.Model):
     """
@@ -12,6 +14,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # Replace ManyToManyField with TaggableManager
+    tags = TaggableManager()
 
     def __str__(self):
         """
@@ -24,7 +28,7 @@ class Post(models.Model):
         Returns the URL to access a detail view of this post.
         """
         return reverse('post_detail', args=[str(self.id)])
-    
+
 class Comment(models.Model):
     """
     Model representing a comment made by a user on a blog post.

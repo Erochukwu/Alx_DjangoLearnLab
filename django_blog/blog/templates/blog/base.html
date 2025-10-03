@@ -14,6 +14,14 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'posts' %}">Blog Posts</a></li>
 
+                <!-- 🔎 Search bar in navbar -->
+                <li>
+                    <form method="get" action="{% url 'post_search' %}" style="display:inline;">
+                        <input type="text" name="q" placeholder="Search..." value="{{ query|default:'' }}">
+                        <button type="submit">Search</button>
+                    </form>
+                </li>
+
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li>

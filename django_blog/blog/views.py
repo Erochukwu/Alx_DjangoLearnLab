@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -11,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import Post, Comment
+from taggit.models import Tag
 from .forms import PostForm, CommentForm
 
 
@@ -87,6 +89,20 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # Add a fresh comment form
         context['comment_form'] = CommentForm()
+        return context
+    
+class PostsByTagListView(ListView):
+    model = Post
+    template_name = "blog/posts_by_tag.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        self.tag = Tag.objects.get(name=self.kwargs["tag_name"])
+        return Post.objects.filter(tags=self.tag)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.tag
         return context
 
 # Create a new blog post (authenticated users only)
@@ -218,3 +234,60 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy("post_detail", kwargs={"pk": self.object.post.pk})
+
+class PostSearchListView(ListView):
+    """
+    Displays a list of blog posts filtered by a search query.
+
+    This view extends Django's generic ListView to provide search functionality
+    across multiple fields in the Post model. It allows users to search posts
+    by title, content, or tags using a query string (`q`) passed through the URL.
+
+    Features:
+        - Retrieves all posts if no search query is provided.
+        - Filters posts dynamically when a search query exists.
+        - Matches posts whose title, content, or tag names contain the query text.
+        - Removes duplicates with `.distinct()` to handle posts with multiple tags.
+        - Passes the search query back to the template for display in the search bar.
+
+    Template:
+        Expects a template located at: blog/post_search.html
+
+    Context:
+        posts (QuerySet): List of filtered Post objects.
+        query (str): The search term entered by the user.
+    """
+
+    model = Post
+    template_name = "blog/post_search.html"  # The template for rendering results
+    context_object_name = "posts"  # Name of the queryset in the template
+
+    def get_queryset(self):
+        """
+        Overrides ListView's get_queryset to apply search filtering.
+
+        Retrieves the search query parameter (`q`) from the GET request.
+        If `q` exists, filters posts by title, content, or tag names.
+        Otherwise, returns all posts.
+        """
+        query = self.request.GET.get("q")
+        qs = Post.objects.all()
+        if query:
+            qs = qs.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+        return qs
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds the search query string to the template context.
+
+        Ensures the user's query is preserved in the search input field
+        after submitting the search form.
+        """
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get("q", "")
+        return context
+

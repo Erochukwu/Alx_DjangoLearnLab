@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from . import views  # keep this for register & profile
 from .views import (
     PostListView, PostDetailView, PostCreateView,
-    PostUpdateView, PostDeleteView,
+    PostUpdateView, PostDeleteView, PostsByTagListView, PostSearchListView,
     CommentCreateView, CommentUpdateView, CommentDeleteView
 )
 
@@ -19,6 +19,11 @@ urlpatterns = [
     # Post list
     path('posts/', PostListView.as_view(), name='post_list'),
     path('posts/', PostListView.as_view(), name='posts'),
+
+    # Tag and search url
+    path("tags/<str:tag_name>/", PostsByTagListView.as_view(), name="posts_by_tag"),
+    path("search/", PostSearchListView.as_view(), name="post_search"),
+
 
     # Post detail view
     path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),

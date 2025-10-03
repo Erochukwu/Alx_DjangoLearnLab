@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Post
+from taggit.models import Tag
 from .models import Comment
 
 
@@ -41,7 +42,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content']  # Exclude 'author'; set automatically
+        fields = ['title', 'content', 'tags']  # Exclude 'author'; set automatically
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -52,7 +53,9 @@ class PostForm(forms.ModelForm):
                 'placeholder': 'Write your post content here...',
                 'rows': 5
             }),
-        }
+            "tags": forms.CheckboxSelectMultiple(),  # or forms.SelectMultiple()
+        },
+        
 
     def clean_title(self):
         """

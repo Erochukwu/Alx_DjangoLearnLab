@@ -145,7 +145,7 @@ Delete Confirmation Page (comment_confirm_delete.html)
 
 Confirms before permanently deleting a comment.
 
-Usage Guide
+### Usage Guide
 
 Adding a Comment
 
@@ -166,3 +166,70 @@ Deleting a Comment
 Click the Delete link under your comment.
 
 Confirm deletion to remove it permanently.
+
+### Tagging System
+How it works
+
+Each post can have one or more tags.
+
+Tags help organize content and make it easier for users to find related posts.
+
+How to add tags
+
+When creating or editing a post, use the tags field.
+
+Enter tags as a comma-separated list (e.g., django, blog, tutorial).
+
+Tags will automatically be saved and linked to the post.
+
+Viewing tags
+
+Tags are displayed below each post.
+
+Clicking on a tag will show all posts associated with that tag at /tags/<tag_name>/.
+
+Search Functionality
+How it works
+
+Users can search posts by typing keywords in the search bar.
+
+The search will look through:
+
+Post titles
+
+Post content
+
+Post tags
+
+Usage
+
+Enter a keyword (e.g., django) in the search bar.
+
+Matching posts will be displayed on the Search Results page.
+
+The search results page is available at /search/?q=your_keyword.
+
+URL Configuration
+
+Key URL patterns:
+
+/ → Post list
+
+/post/<id>/ → Post details
+
+/tags/<tag_name>/ → Filter posts by tag
+
+/search/?q=<query> → Search posts by keyword
+The project includes tests for tagging and search. Run them with:
+python manage.py test blog.tests
+
+
+Tech Stack
+
+Python 3.12+
+
+Django 5.x
+
+PostgreSQL / SQLite (default: SQLite)
+
+django-taggit
