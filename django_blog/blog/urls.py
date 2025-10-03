@@ -44,14 +44,14 @@ path(
 
 # Edit a specific comment (author only)
 path(
-    "post/<int:post_id>/comments/<int:pk>/edit/",
+    "comment/<int:pk>/update/",
     CommentUpdateView.as_view(),
     name="comment_update"
 ),
 
 # Delete a specific comment (author only)
 path(
-    "post/<int:post_id>/comments/<int:pk>/delete/",
+    "comment/<int:pk>/delete/",
     CommentDeleteView.as_view(),
     name="comment_delete"
 ),
