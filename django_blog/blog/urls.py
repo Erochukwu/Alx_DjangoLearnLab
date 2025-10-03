@@ -37,7 +37,7 @@ urlpatterns = [
     # -------------------------
     # Create a new comment on a post
 path(
-    "post/<int:post_id>/comments/new/",
+    "post/<int:pk>/comments/new/",
     CommentCreateView.as_view(),
     name="comment_create"
 ),
