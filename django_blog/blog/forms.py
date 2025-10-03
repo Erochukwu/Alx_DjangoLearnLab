@@ -43,6 +43,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']  # 'tags' comes from django-taggit
+        widgets = {
+            'tags': TagWidget(),   # ✅ Use TagWidget for better tag handling
+        }
                
     def clean_title(self):
         """
